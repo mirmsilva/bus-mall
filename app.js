@@ -35,7 +35,7 @@ Item.prototype.renderItem= function(h2,imageTag){
   h2.textContent = this.name;
 }
 
-//global function for rendering three items
+//function for rendering three items
 function renderThreeItems(leftItem,middleItem, rightItem){
   leftItem.renderItem(leftItemH2Elem, leftItemImageTag);
   middleItem.renderItem(middleItemH2Elem, middleItemImageTag);
@@ -67,7 +67,7 @@ function pickItems(){
     }
   }
 
-//function for rendering results
+//function for rendering results on screen
 function renderResults(){
   resultsPannelUlElem.innerHTML= '';
   const h2Elem =document.createElement('h2');
@@ -81,26 +81,20 @@ function renderResults(){
 }
 }
 
-//add chart
+//Chart const
 const makeItemChart = function(){
   const itemChart = document.getElementById('itemChart').getContext('2d');
   const itemData =[]; //data array
+  const itemViews =[];
   const itemLabels= []; //label array
+
   //iterate through Item.allImages & grab the name & clicks
   for(let item of Item.allItems){
     itemData.push(item.votes);
+    itemViews.push(item.timesViewed);
     itemLabels.push(item.name);
   }
-  //color array
-  const colors = [];
-  for(let i=0; i< Item.allItems.length; i++){
-    if (i %2 ===0){
-      colors.push('purple');
-    }
-    else{
-      colors.push('black');
-    }
-  }
+  //chart data
   const myChart = new Chart(itemChart, {
     type: 'bar',
     data: {
@@ -108,7 +102,11 @@ const makeItemChart = function(){
         datasets: [{
             label: '# of Votes',
             data: itemData,
-            backgroundColor: colors,
+            backgroundColor: 'purple',
+    },{
+      label: '# of Views',
+            data: itemViews,
+            backgroundColor: 'lightgrey',
     }]
   },
   options: {

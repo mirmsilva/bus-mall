@@ -2,12 +2,25 @@ body{
   background-color: lightblue;
 }
 header{
-  height: 100px;
+  height: 200px;
   background-color: rgb(163, 128, 163);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 img{
   width: 100px;
   height: 150px;
+}
+#bus{
+  padding-left: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#welcome{
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
 }
 #howToPlay{
 padding-top: 30px;
@@ -24,14 +37,42 @@ text-align: center;
 
 #left_item, #middle_item, #right_item{
   width: 200px;
-  height: 250px;
+  height: 200px;
   padding-top: 20px;
   border: purple 2px solid;
+  background-color: rgb(96, 137, 151);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
+#counts{
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
 #item-clicks{
+  height: 300px;
+  text-align: center;
+}
+#chart{
+  text-align: center;
+  width: 400px;
+  height: 250px;
+}
+h1{
+  
+  font-family: 'Pattaya', sans-serif;
+  font-size: 64px;
+}
+h2{
+  font-family: 'Pattaya', sans-serif;
+  font-size: 20px;
+}
+li, p{
+  font-family: Arial, Helvetica, sans-serif;
+}
+footer{
+  height: 50px;
   text-align: center;
 }

@@ -1,17 +1,25 @@
 <!DOCTYPE html>
   <html>
     <head>
-      <title>Lab 11</title>
+      <title>BusMall</title>
       <link rel="stylesheet" href="./css/reset.css">
       <link rel="stylesheet" href="./css/style.css">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
     </head>
     <body>
       <header>
-        <h1>BusMall</h1>
+        <section id = "bus">
+        <img src = "https://www.pinclipart.com/picdir/big/159-1598064_london-clipart-bus-uk-london-png-download.png">
+        </section>
+        <section id = "welcome">
+        <h1>Welcome to BusMall</h1>
+        </section>
       </header>
       <section id ="howToPlay">
         <h2>How to play!</h2>
-        <p>click on one of the three products you would be interested in buying.</p>
+        <p>click on one of the three products you would be interested in buying. Once you've clicked through 25 rounds your results will be displayed below!
+        </p>
       </section>
       <section id = "all_items">
         <div id = "left_item">
@@ -27,22 +35,36 @@
           <h2 id = "right_item_h2">Right Item</h2>
         </div>
         </section>
+        <section id = "counts">
         <ul id = "item-clicks">
-          <h2>Item Likes</h2>
-          <li>bag : 0</li>
-          <li>banana : 0</li>
-          <li>bathroom : 0</li>
-          <li>boots : 0</li>
-          <li>breakfast : 0</li>
-          <li>bubblegum : 0</li>
-          <li>chair : 0</li>
-          <li>cthulhu : 0</li>
-          <li>dog-duck : 0</li>
-          <li>dragon : 0</li>
-          <li>pen : 0</li>
-          <li>pet : 0</li>
+          <h2>Item Likes & Views</h2>
+          <li>bag</li>
+          <li>banana</li>
+          <li>bathroom</li>
+          <li>boots</li>
+          <li>breakfast</li>
+          <li>bubblegum</li>
+          <li>chair</li>
+          <li>cthulhu</li>
+          <li>dog-duck</li>
+          <li>dragon</li>
+          <li>pen</li>
+          <li>pet</li>
+          <li>pet-sweep</li>
+          <li>scissors</li>
+          <li>shark</li>
+          <li>sweep</li>
+          <li>tauntaun</li>
         </ul>
-      <footer>Thanks for stopping by!</footer>
+        <div id = "chart">
+          <h2>Results Chart</h2>
+          <canvas id = "itemChart" width = 150px height="100px"></canvas>
+        </div>
+      </section>
+      <footer>
+        <p>Thanks for stopping by!</p>
+      </footer>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
       <script src = "app.js"></script>
     </body>
   </html>

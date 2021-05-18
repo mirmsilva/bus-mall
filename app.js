@@ -1,109 +1,146 @@
 'use strict'
 //Global Constants/Variables
-const resultsPannelUlElem = document.getElementById('goat-clicks');
-const goatImageSectionTag = document.getElementById('all_goats');
-const leftGoatImageTag = document.getElementById('left_goat_img');
-const rightGoatImageTag = document.getElementById('right_goat_img');
-const leftGoatH2Elem = document.getElementById('left_goat_h2');
-const rightGoatH2Elm = document.getElementById('right_goat_h2');
+const resultsPannelUlElem = document.getElementById('item-clicks');
+const itemImageSectionTag = document.getElementById('all_items');
+const leftItemImageTag = document.getElementById('left_item_img');
+const middleItemImageTag = document.getElementById('middle_item_img');
+const rightItemImageTag = document.getElementById('right_item_img');
+const leftItemH2Elem = document.getElementById('left_item_h2');
+const middleItemH2Elem = document.getElementById('middle_item_h2');
+const rightItemH2Elm = document.getElementById('right_item_h2');
 
 let voteCounter= 0;
 
-let currentLeftGoat = null;
-let currentRightGoat = null;
+//current items
+let currentLeftItem = null;
+let currentMiddleItem = null;
+let currentRightItem = null;
 
-//goat constructor function
-function Goat(name, imgPath){
+//item constructor function
+function Item(name, imgPath){
   this.name = name;
   this.imgPath = imgPath;
   this.votes = 0; 
-  this.timesShown = 0;
+  this.timesViewed = 0;
 
-  Goat.allGoats.push(this)
+  Item.allItems.push(this)
 }
-let locations = [];
-Goat.allGoats = [];
 
-//method for rendering one goat. 
-// needs to know 'this'
-// needs to know where to render h2 & img tag
+Item.allItems = [];
 
-Goat.prototype.renderGoat= function(h2,imageTag){
+//function prototype for rendering h2 & img
+Item.prototype.renderItem= function(h2,imageTag){
   imageTag.src = this.imgPath;
   h2.textContent = this.name;
 }
 
-//global function for taking two goats & calls the function
-function renderTwoGoats(leftGoat,rightGoat){
-  leftGoat.renderGoat(leftGoatH2Elem, leftGoatImageTag);
-  rightGoat.renderGoat(rightGoatH2Elm, rightGoatImageTag);
+//global function for rendering three items
+function renderThreeItems(leftItem,middleItem, rightItem){
+  leftItem.renderItem(leftItemH2Elem, leftItemImageTag);
+  middleItem.renderItem(middleItemH2Elem, middleItemImageTag);
+  rightItem.renderItem(rightItemH2Elm, rightItemImageTag);
 }
 
-//pick random goats
-function pickGoats(){
-  const leftGoatIndex = Math.floor(Math.random()*Goat.allGoats.length);
-    let rightGoatIndex; 
-    while(rightGoatIndex === undefined || rightGoatIndex === leftGoatIndex){
-      rightGoatIndex = Math.floor(Math.random()*Goat.allGoats.length);
+//function for picking random items
+function pickItems(){
+  const leftItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    let middleItemIndex;
+    let rightItemIndex; 
+    while(middleItemIndex === undefined || middleItemIndex === leftItemIndex){
+      middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    while(rightItemIndex === undefined || rightItemIndex === middleItemIndex){
+      rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
     }
-
-// assign current left & right goats based off index numbers we got
-currentLeftGoat= Goat.allGoats[leftGoatIndex];
-currentRightGoat= Goat.allGoats[rightGoatIndex];
+  }
+// assign current items based off index numbers we got
+currentLeftItem= Item.allItems[leftItemIndex];
+currentMiddleItem = Item.allItems[middleItemIndex];
+currentRightItem= Item.allItems[rightItemIndex];
 }
 
+//function for rendering results
 function renderResults(){
   resultsPannelUlElem.innerHTML= '';
   const h2Elem =document.createElement('h2');
-  h2Elem.textContent = 'Goat Likes';
+  h2Elem.textContent = 'Item Likes';
   resultsPannelUlElem.appendChild(h2Elem);
-  for(let goat of Goat.allGoats){
+  for(let item of Item.allItems){
     const liElem = document.createElement('li');
-    liElem.textContent = `${goat.name} : ${goat.votes}`;
+    liElem.textContent = `${item.name} received: ${item.votes} votes & ${item.timesViewed} views`;
     resultsPannelUlElem.appendChild(liElem);
 }
 }
-//listner & handler
+//function handler
 function handleClick(e){
-  console.log('i am listening');
   let thingTheyClickedOn = e.target;
   console.log(thingTheyClickedOn);
-  if(voteCounter<10){
-    if (thingTheyClickedOn ===leftGoatImageTag || thingTheyClickedOn ===rightGoatImageTag){
-    //count the vote
+  if(voteCounter<5){
+    if (thingTheyClickedOn ===leftItemImageTag || thingTheyClickedOn === middleItemImageTag ||thingTheyClickedOn ===rightItemImageTag){
+      //count vote & add to item
      voteCounter++
-    //add to the goat
-      if (thingTheyClickedOn ===leftGoatImageTag){
-      currentLeftGoat.votes++;
-      } else{
-      currentRightGoat.votes++;
+      if (thingTheyClickedOn ===leftItemImageTag){
+      currentLeftItem.votes++;
       }
-    //render new
-    pickGoats();
-    renderTwoGoats(currentLeftGoat,currentRightGoat);
+       if(thingTheyClickedOn ===middleItemImageTag){
+      currentMiddleItem.votes++;
+      } else{
+        currentRightItem.votes++;
+      }
+
+    //render new item
+    pickItems();
+    renderThreeItems(currentLeftItem,currentMiddleItem,currentRightItem);
     }else{
-      alert('you missed the goat');
+      alert('you missed the item');
     }
   } else{
-    goatImageSectionTag.removeEventListener('click', handleClick);
+    itemImageSectionTag.removeEventListener('click', handleClick);
     renderResults();
   }
 }
 
+// //function to count times item was viewed by user
+// function viewCount(){
+//   let viewCounter = [Item.allItems.length]
+//   let views = 0;
+//   for (i=0; i<Item.allItems.length; i++){
+//    currentViews = 1;
+//    for(j=0; j<Item.allItems.length; j++){
+//      if(Item.allItems[i] == Item.allItems[j]{
+//        currentViews++;
+//        viewCounter[j]= views;
+//      }
+//    }
+//    if(viewCounter[i] != views)
+//     viewCounter[i]= currentViews;
+//  }
+// }
 
-goatImageSectionTag.addEventListener('click', handleClick)
 
-new Goat('Cruising Goat', './images/cruisin-goat.jpg');
+//listner
+itemImageSectionTag.addEventListener('click', handleClick)
 
-new Goat('Float Your Goat', './images/float-your-goat.jpg');
-new Goat('Goat Away', './images/goat-away.jpg')
-new Goat('Goat Out of Hand', './images/goat-out-of-hand.jpg')
-new Goat('Kissing Goat', './images/kissing-goat.jpg');
-new Goat('Sassy Goat', './images/sassy-goat.jpg');
-new Goat('Sweater Goat', './images/sweater-goat.jpg');
-new Goat('Smiling Goat', './images/smiling-goat.jpg');
+//item list
+new Item('bag', 'images/bag.jpeg');
+new Item('banana', 'images/banana.jpeg');
+new Item('bathroom', 'images/bathroom.jpeg');
+new Item('boots', 'images/boots.jpeg');
+new Item('breakfast', 'images/breakfast.jpeg');
+new Item('bubblegum', 'images/bubblegum.jpeg');
+new Item('chair', 'images/chair.jpeg');
+new Item('cthulhu', 'images/cthulhu.jpeg');
+new Item('dog-duck', 'images/dog-duck.jpeg');
+new Item('dragon', 'images/dragon.jpeg');
+new Item('pen', 'images/pen.jpeg');
+new Item('pet-sweep', 'images/pet-sweep.jpeg');
+new Item('scissors', 'images/scissors.jpeg');
+new Item('shark', 'images/shark.jpeg');
+new Item('sweep', 'images/sweep.png');
+new Item('tauntaun', 'images/tauntaun.jpeg');
 
-pickGoats();
-console.log(currentRightGoat)
-console.log(currentLeftGoat)
-renderTwoGoats(currentLeftGoat, currentRightGoat)
+//display items
+pickItems();
+console.log(currentRightItem)
+console.log(currentMiddleItem)
+console.log(currentLeftItem)
+renderThreeItems(currentLeftItem, currentMiddleItem, currentRightItem)

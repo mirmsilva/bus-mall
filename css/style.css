@@ -1,0 +1,37 @@
+body{
+  background-color: lightblue;
+}
+header{
+  height: 100px;
+  background-color: rgb(163, 128, 163);
+}
+img{
+  width: 100px;
+  height: 150px;
+}
+#howToPlay{
+padding-top: 30px;
+text-align: center;
+}
+
+#all_items{
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+
+#left_item, #middle_item, #right_item{
+  width: 200px;
+  height: 250px;
+  padding-top: 20px;
+  border: purple 2px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#item-clicks{
+  text-align: center;
+}

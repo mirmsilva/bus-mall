@@ -48,7 +48,7 @@ function pickItems(){
     let rightItemIndex; 
     while(middleItemIndex === undefined || middleItemIndex === leftItemIndex){
       middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    while(rightItemIndex === undefined || rightItemIndex === middleItemIndex){
+    while(rightItemIndex === undefined || rightItemIndex === leftItemIndex || rightItemIndex === middleItemIndex){
       rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
     }
   }
@@ -64,6 +64,7 @@ function renderResults(){
   const h2Elem =document.createElement('h2');
   h2Elem.textContent = 'Item Likes';
   resultsPannelUlElem.appendChild(h2Elem);
+
   for(let item of Item.allItems){
     const liElem = document.createElement('li');
     liElem.textContent = `${item.name} received: ${item.votes} votes & ${item.timesViewed} views`;
@@ -80,10 +81,9 @@ function handleClick(e){
      voteCounter++
       if (thingTheyClickedOn ===leftItemImageTag){
       currentLeftItem.votes++;
-      }
-       if(thingTheyClickedOn ===middleItemImageTag){
-      currentMiddleItem.votes++;
-      } else{
+      }else if(thingTheyClickedOn ===middleItemImageTag){
+        currentMiddleItem.votes++;
+      }else if(thingTheyClickedOn ===rightItemImageTag){
         currentRightItem.votes++;
       }
 

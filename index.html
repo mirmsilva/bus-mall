@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <html>
     <head>
-      <title>Lab 11</title>
+      <title>BusMall</title>
       <link rel="stylesheet" href="./css/reset.css">
       <link rel="stylesheet" href="./css/style.css">
     </head>
@@ -27,6 +27,7 @@
           <h2 id = "right_item_h2">Right Item</h2>
         </div>
         </section>
+        <section id = "counts">
         <ul id = "item-clicks">
           <h2>Item Likes</h2>
           <li>bag : 0</li>
@@ -42,7 +43,12 @@
           <li>pen : 0</li>
           <li>pet : 0</li>
         </ul>
+        <div id = "chart">
+          <canvas id = "itemChart" width = 500px height="300"></canvas>
+        </div>
+      </section>
       <footer>Thanks for stopping by!</footer>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
       <script src = "app.js"></script>
     </body>
   </html>

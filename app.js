@@ -16,8 +16,9 @@ let currentLeftItem = null;
 let currentMiddleItem = null;
 let currentRightItem = null;
 
+
 //item constructor function
-function Item(name, imgPath){
+const Item = function(name, imgPath){
   this.name = name;
   this.imgPath = imgPath;
   this.votes = 0; 
@@ -43,20 +44,28 @@ function renderThreeItems(leftItem,middleItem, rightItem){
 
 //function for picking random items
 function pickItems(){
-  const leftItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    let middleItemIndex;
-    let rightItemIndex; 
-    while(middleItemIndex === undefined || middleItemIndex === leftItemIndex){
-      middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    while(rightItemIndex === undefined || rightItemIndex === leftItemIndex || rightItemIndex === middleItemIndex){
-      rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
+  const usedItems = [];
+  usedItems.push(currentLeftItem);
+  usedItems.push(currentMiddleItem);
+  usedItems.push(currentRightItem);
+  while(usedItems.includes(currentLeftItem)){
+    let leftItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentLeftItem = Item.allItems[leftItemIndex];
+  }
+  usedItems.push(currentLeftItem);
+
+  while(usedItems.includes(currentMiddleItem)){
+    let middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentMiddleItem = Item.allItems[middleItemIndex];
+  }
+  usedItems.push(currentMiddleItem);
+
+  while(usedItems.includes(currentRightItem)){
+    let rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentRightItem = Item.allItems[rightItemIndex];
+
     }
   }
-// assign current items based off index numbers we got
-currentLeftItem= Item.allItems[leftItemIndex];
-currentMiddleItem = Item.allItems[middleItemIndex];
-currentRightItem= Item.allItems[rightItemIndex];
-}
 
 //function for rendering results
 function renderResults(){
@@ -71,14 +80,60 @@ function renderResults(){
     resultsPannelUlElem.appendChild(liElem);
 }
 }
-//function handler
+
+//add chart
+const makeItemChart = function(){
+  const itemChart = document.getElementById('itemChart').getContext('2d');
+  const itemData =[]; //data array
+  const itemLabels= []; //label array
+  //iterate through Item.allImages & grab the name & clicks
+  for(let item of Item.allItems){
+    itemData.push(item.votes);
+    itemLabels.push(item.name);
+  }
+  //color array
+  const colors = [];
+  for(let i=0; i< Item.allItems.length; i++){
+    if (i %2 ===0){
+      colors.push('purple');
+    }
+    else{
+      colors.push('black');
+    }
+  }
+  const myChart = new Chart(itemChart, {
+    type: 'bar',
+    data: {
+        labels: itemLabels,
+        datasets: [{
+            label: '# of Votes',
+            data: itemData,
+            backgroundColor: colors,
+    }]
+  },
+  options: {
+      scales: {
+        yAxes: [{
+          ticks:{
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
+//click handler - increments item vote & views
 function handleClick(e){
   let thingTheyClickedOn = e.target;
   console.log(thingTheyClickedOn);
   if(voteCounter<5){
     if (thingTheyClickedOn ===leftItemImageTag || thingTheyClickedOn === middleItemImageTag ||thingTheyClickedOn ===rightItemImageTag){
       //count vote & add to item
-     voteCounter++
+     voteCounter++;
+     currentMiddleItem.timesViewed++;
+     currentMiddleItem.timesViewed++;
+     currentRightItem.timesViewed++;
       if (thingTheyClickedOn ===leftItemImageTag){
       currentLeftItem.votes++;
       }else if(thingTheyClickedOn ===middleItemImageTag){
@@ -96,25 +151,9 @@ function handleClick(e){
   } else{
     itemImageSectionTag.removeEventListener('click', handleClick);
     renderResults();
+    makeItemChart();
   }
 }
-
-// //function to count times item was viewed by user
-// function viewCount(){
-//   let viewCounter = [Item.allItems.length]
-//   let views = 0;
-//   for (i=0; i<Item.allItems.length; i++){
-//    currentViews = 1;
-//    for(j=0; j<Item.allItems.length; j++){
-//      if(Item.allItems[i] == Item.allItems[j]{
-//        currentViews++;
-//        viewCounter[j]= views;
-//      }
-//    }
-//    if(viewCounter[i] != views)
-//     viewCounter[i]= currentViews;
-//  }
-// }
 
 
 //listner

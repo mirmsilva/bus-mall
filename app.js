@@ -17,7 +17,9 @@ let currentMiddleItem = null;
 let currentRightItem = null;
 
 
-//item constructor function
+//constructor functions
+
+// item
 const Item = function(name, imgPath){
   this.name = name;
   this.imgPath = imgPath;
@@ -29,66 +31,14 @@ const Item = function(name, imgPath){
 
 Item.allItems = [];
 
-//function prototype for rendering h2 & img
-Item.prototype.renderItem= function(h2,imageTag){
-  imageTag.src = this.imgPath;
-  h2.textContent = this.name;
-}
-
-//function for rendering three items
-function renderThreeItems(leftItem,middleItem, rightItem){
-  leftItem.renderItem(leftItemH2Elem, leftItemImageTag);
-  middleItem.renderItem(middleItemH2Elem, middleItemImageTag);
-  rightItem.renderItem(rightItemH2Elm, rightItemImageTag);
-}
-
-//function for picking random items
-function pickItems(){
-  const usedItems = [];
-  usedItems.push(currentLeftItem);
-  usedItems.push(currentMiddleItem);
-  usedItems.push(currentRightItem);
-  while(usedItems.includes(currentLeftItem)){
-    let leftItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    currentLeftItem = Item.allItems[leftItemIndex];
-  }
-  usedItems.push(currentLeftItem);
-
-  while(usedItems.includes(currentMiddleItem)){
-    let middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    currentMiddleItem = Item.allItems[middleItemIndex];
-  }
-  usedItems.push(currentMiddleItem);
-
-  while(usedItems.includes(currentRightItem)){
-    let rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
-    currentRightItem = Item.allItems[rightItemIndex];
-
-    }
-  }
-
-//function for rendering results on screen
-function renderResults(){
-  resultsPannelUlElem.innerHTML= '';
-  const h2Elem =document.createElement('h2');
-  h2Elem.textContent = 'Item Likes';
-  resultsPannelUlElem.appendChild(h2Elem);
-
-  for(let item of Item.allItems){
-    const liElem = document.createElement('li');
-    liElem.textContent = `${item.name} received: ${item.votes} votes & ${item.timesViewed} views`;
-    resultsPannelUlElem.appendChild(liElem);
-}
-}
-
-//Chart const
+//chart
 const makeItemChart = function(){
   const itemChart = document.getElementById('itemChart').getContext('2d');
   const itemData =[]; //data array
-  const itemViews =[];
+  const itemViews =[]; // item view array
   const itemLabels= []; //label array
 
-  //iterate through Item.allImages & grab the name & clicks
+  //iterate through Item.allImages & grab the name, views & clicks
   for(let item of Item.allItems){
     itemData.push(item.votes);
     itemViews.push(item.timesViewed);
@@ -121,6 +71,89 @@ const makeItemChart = function(){
   });
 }
 
+
+//function prototype
+
+//rendering an item
+Item.prototype.renderItem= function(h2,imageTag){
+  imageTag.src = this.imgPath;
+  h2.textContent = this.name;
+}
+
+//functions
+
+//render three items
+function renderThreeItems(leftItem,middleItem, rightItem){
+  leftItem.renderItem(leftItemH2Elem, leftItemImageTag);
+  middleItem.renderItem(middleItemH2Elem, middleItemImageTag);
+  rightItem.renderItem(rightItemH2Elm, rightItemImageTag);
+}
+
+//picking random items
+function pickItems(){
+  const usedItems = [];
+  usedItems.push(currentLeftItem);
+  usedItems.push(currentMiddleItem);
+  usedItems.push(currentRightItem);
+  while(usedItems.includes(currentLeftItem)){
+    let leftItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentLeftItem = Item.allItems[leftItemIndex];
+  }
+  usedItems.push(currentLeftItem);
+
+  while(usedItems.includes(currentMiddleItem)){
+    let middleItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentMiddleItem = Item.allItems[middleItemIndex];
+  }
+  usedItems.push(currentMiddleItem);
+
+  while(usedItems.includes(currentRightItem)){
+    let rightItemIndex = Math.floor(Math.random()*Item.allItems.length);
+    currentRightItem = Item.allItems[rightItemIndex];
+
+    }
+  }
+
+//rendering results on screen
+function renderResults(){
+  resultsPannelUlElem.innerHTML= '';
+  const h2Elem =document.createElement('h2');
+  h2Elem.textContent = 'Item Likes';
+  resultsPannelUlElem.appendChild(h2Elem);
+
+  for(let item of Item.allItems){
+    const liElem = document.createElement('li');
+    liElem.textContent = `${item.name} received: ${item.votes} votes & ${item.timesViewed} views`;
+    resultsPannelUlElem.appendChild(liElem);
+}
+}
+//function to update storage
+function updateStorage(){
+  //turn the thing i Want to store into a string
+  const stringifiedItems = JSON.stringify(Item.allItems);
+  //set the item into storage with a key
+  localStorage.setItem('items', stringifiedItems);
+}
+
+//write a function to get things from storage
+//if you have nothing in storage you'll need to make products
+function getStuffOut(){
+  //request things from storage with our key
+  let itemsFromStorage = localStorage.getItem('items');
+  //if I get stuff back, parse it
+  if(itemsFromStorage){
+    let parsedItem = JSON.parse(itemsFromStorage);
+    console.log (parsedItem);
+    //reinstate it
+    for(let item of parsedItem){
+      makeAItem();
+    }
+    //render any orders we have from storage
+    renderThreeItems();
+  }else{
+    renderThreeItems('item 1','item 3');
+  }
+}
 //click handler - increments item vote & views
 function handleClick(e){
   let thingTheyClickedOn = e.target;
@@ -153,7 +186,6 @@ function handleClick(e){
   }
 }
 
-
 //listner
 itemImageSectionTag.addEventListener('click', handleClick)
 
@@ -181,3 +213,5 @@ console.log(currentRightItem)
 console.log(currentMiddleItem)
 console.log(currentLeftItem)
 renderThreeItems(currentLeftItem, currentMiddleItem, currentRightItem)
+//getStuffOut();
+

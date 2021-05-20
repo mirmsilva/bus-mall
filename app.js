@@ -129,29 +129,27 @@ function renderResults(){
 }
 //function to update storage
 function updateStorage(){
-  //turn the thing i Want to store into a string
-  const stringifiedItems = JSON.stringify(Item.allItems);
-  //set the item into storage with a key
-  localStorage.setItem('items', stringifiedItems);
+  const stringifiedItems = JSON.stringify(Item.allItems);  //turn the thing i Want to store into a string
+  localStorage.setItem('items', stringifiedItems);//set the item into storage with a key
 }
 
 //write a function to get things from storage
 //if you have nothing in storage you'll need to make products
 function getStuffOut(){
-  //request things from storage with our key
-  let itemsFromStorage = localStorage.getItem('items');
+  let itemsFromStorage = localStorage.getItem('items');//request things from storage with our key
   //if I get stuff back, parse it
   if(itemsFromStorage){
     let parsedItem = JSON.parse(itemsFromStorage);
     console.log (parsedItem);
     //reinstate it
     for(let item of parsedItem){
-      makeAItem();
-    }
+      let myItem = new Item(item.name, item.imgPath)
+      myItem.votes = items.votes;
+      myItem.timesViewed = items.timesViewed;
+    } console.log (Item.allItems)
     //render any orders we have from storage
-    renderThreeItems();
   }else{
-    renderThreeItems('item 1','item 3');
+    makeItem();
   }
 }
 //click handler - increments item vote & views
@@ -162,7 +160,7 @@ function handleClick(e){
     if (thingTheyClickedOn ===leftItemImageTag || thingTheyClickedOn === middleItemImageTag ||thingTheyClickedOn ===rightItemImageTag){
       //count vote & add to item
      voteCounter++;
-     currentMiddleItem.timesViewed++;
+     currentLeftItem.timesViewed++;
      currentMiddleItem.timesViewed++;
      currentRightItem.timesViewed++;
       if (thingTheyClickedOn ===leftItemImageTag){
@@ -190,28 +188,30 @@ function handleClick(e){
 itemImageSectionTag.addEventListener('click', handleClick)
 
 //item list
-new Item('bag', 'images/bag.jpeg');
-new Item('banana', 'images/banana.jpeg');
-new Item('bathroom', 'images/bathroom.jpeg');
-new Item('boots', 'images/boots.jpeg');
-new Item('breakfast', 'images/breakfast.jpeg');
-new Item('bubblegum', 'images/bubblegum.jpeg');
-new Item('chair', 'images/chair.jpeg');
-new Item('cthulhu', 'images/cthulhu.jpeg');
-new Item('dog-duck', 'images/dog-duck.jpeg');
-new Item('dragon', 'images/dragon.jpeg');
-new Item('pen', 'images/pen.jpeg');
-new Item('pet-sweep', 'images/pet-sweep.jpeg');
-new Item('scissors', 'images/scissors.jpeg');
-new Item('shark', 'images/shark.jpeg');
-new Item('sweep', 'images/sweep.png');
-new Item('tauntaun', 'images/tauntaun.jpeg');
-
+function makeItem(){
+  new Item('bag', 'images/bag.jpeg');
+  new Item('banana', 'images/banana.jpeg');
+  new Item('bathroom', 'images/bathroom.jpeg');
+  new Item('boots', 'images/boots.jpeg');
+  new Item('breakfast', 'images/breakfast.jpeg');
+  new Item('bubblegum', 'images/bubblegum.jpeg');
+  new Item('chair', 'images/chair.jpeg');
+  new Item('cthulhu', 'images/cthulhu.jpeg');
+  new Item('dog-duck', 'images/dog-duck.jpeg');
+  new Item('dragon', 'images/dragon.jpeg');
+  new Item('pen', 'images/pen.jpeg');
+  new Item('pet-sweep', 'images/pet-sweep.jpeg');
+  new Item('scissors', 'images/scissors.jpeg');
+  new Item('shark', 'images/shark.jpeg');
+  new Item('sweep', 'images/sweep.png');
+  new Item('tauntaun', 'images/tauntaun.jpeg');
+}
 //display items
+getStuffOut();
 pickItems();
 console.log(currentRightItem)
 console.log(currentMiddleItem)
 console.log(currentLeftItem)
-renderThreeItems(currentLeftItem, currentMiddleItem, currentRightItem)
-//getStuffOut();
+renderThreeItems(currentLeftItem, currentMiddleItem, currentRightItem);
+
 

@@ -71,6 +71,32 @@ const makeItemChart = function(){
   });
 }
 
+//percentage chart
+const makePercentageChart = function(){
+  const itemChart = document.getElementById('percentageChart').getContext('2d');
+
+  //chart data
+  const percentageChart = new Chart(itemChart, {
+    type: 'bar',
+    data: {
+        labels: itemLabels,
+        datasets: [{
+            label: '% of votes vs views',
+            data: storageArray(),
+            backgroundColor: 'purple',
+    }]
+  },
+  options: {
+      scales: {
+        yAxes: [{
+          ticks:{
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
 
 //function prototype
 
@@ -136,22 +162,24 @@ function updateStorage(){
 //write a function to get things from storage
 //if you have nothing in storage you'll need to make products
 function getStuffOut(){
-  let itemsFromStorage = localStorage.getItem('items');//request things from storage with our key
+  let storedItems = localStorage.getItem('items');//request things from storage with our key
   //if I get stuff back, parse it
-  if(itemsFromStorage){
-    let parsedItem = JSON.parse(itemsFromStorage);
+  if(storedItems){
+    let parsedItem = JSON.parse(storedItems);
     console.log (parsedItem);
     //reinstate it
     for(let item of parsedItem){
-      let myItem = new Item(item.name, item.imgPath)
-      myItem.votes = items.votes;
-      myItem.timesViewed = items.timesViewed;
-    } console.log (Item.allItems)
+      let newItem = new Item(item.name, item.imgPath);
+      newItem.votes = parseInt(item.votes);
+      newItem.timesViewed = parseInt(item.timesViewed);
     //render any orders we have from storage
-  }else{
-    makeItem();
+    }
+    } else{
+      makeItem();
   }
 }
+
+
 //click handler - increments item vote & views
 function handleClick(e){
   let thingTheyClickedOn = e.target;
@@ -159,6 +187,7 @@ function handleClick(e){
   if(voteCounter<5){
     if (thingTheyClickedOn ===leftItemImageTag || thingTheyClickedOn === middleItemImageTag ||thingTheyClickedOn ===rightItemImageTag){
       //count vote & add to item
+    updateStorage();
      voteCounter++;
      currentLeftItem.timesViewed++;
      currentMiddleItem.timesViewed++;
@@ -174,6 +203,7 @@ function handleClick(e){
     //render new item
     pickItems();
     renderThreeItems(currentLeftItem,currentMiddleItem,currentRightItem);
+    
     }else{
       alert('you missed the item');
     }
@@ -183,7 +213,20 @@ function handleClick(e){
     makeItemChart();
   }
 }
+//Total Percentage
+function totalPercent(){
+  let storageArray=[];
 
+  for (let i=0; i<Item.allItems.length; i++) {
+    if (parseInt(Item.allItems[i].votes)===0 || parseInt(Item.allItems[i].timesViewed)===0)
+  {
+    storageArray.push(0);
+  }else {
+    storageArray.push(parseInt(Item.allItems[i].votes) / parseInt(Item.allItems[i].timesViewed)*100);
+  }
+}
+return storageArray;
+}
 //listner
 itemImageSectionTag.addEventListener('click', handleClick)
 

@@ -16,6 +16,7 @@ let currentLeftItem = null;
 let currentMiddleItem = null;
 let currentRightItem = null;
 
+let storageArray=[];
 
 //constructor functions
 
@@ -25,6 +26,7 @@ const Item = function(name, imgPath){
   this.imgPath = imgPath;
   this.votes = 0; 
   this.timesViewed = 0;
+  this.percent= 0;
 
   Item.allItems.push(this)
 }
@@ -34,7 +36,7 @@ Item.allItems = [];
 //chart
 const makeItemChart = function(){
   const itemChart = document.getElementById('itemChart').getContext('2d');
-  const itemData =[]; //data array
+  const itemData =[]; //data array/votes
   const itemViews =[]; // item view array
   const itemLabels= []; //label array
 
@@ -73,16 +75,23 @@ const makeItemChart = function(){
 
 //percentage chart
 const makePercentageChart = function(){
-  const itemChart = document.getElementById('percentageChart').getContext('2d');
+  const percentChart = document.getElementById('percentChart').getContext('2d');
+  const itemLabel =[]; //label/name array
+ const itemPercentage =[]; // item view array
 
+  //iterate through Item.allImages & grab the name, views & clicks
+  for(let item of Item.allItems){
+    itemLabel.push(item.name);
+    itemPercentage.push(storageArray);
+   
   //chart data
-  const percentageChart = new Chart(itemChart, {
+  const percentageChart = new Chart(percentChart, {
     type: 'bar',
     data: {
-        labels: itemLabels,
+        labels: itemLabel,
         datasets: [{
             label: '% of votes vs views',
-            data: storageArray(),
+            data: storageArray,
             backgroundColor: 'purple',
     }]
   },
@@ -97,7 +106,7 @@ const makePercentageChart = function(){
     }
   });
 }
-
+}
 //function prototype
 
 //rendering an item
@@ -153,6 +162,7 @@ function renderResults(){
     resultsPannelUlElem.appendChild(liElem);
 }
 }
+
 //function to update storage
 function updateStorage(){
   const stringifiedItems = JSON.stringify(Item.allItems);  //turn the thing i Want to store into a string
@@ -172,6 +182,7 @@ function getStuffOut(){
       let newItem = new Item(item.name, item.imgPath);
       newItem.votes = parseInt(item.votes);
       newItem.timesViewed = parseInt(item.timesViewed);
+      newItem.percent = parseInt(item.percent);
     //render any orders we have from storage
     }
     } else{
@@ -184,7 +195,7 @@ function getStuffOut(){
 function handleClick(e){
   let thingTheyClickedOn = e.target;
   console.log(thingTheyClickedOn);
-  if(voteCounter<5){
+  if(voteCounter<25){
     if (thingTheyClickedOn ===leftItemImageTag || thingTheyClickedOn === middleItemImageTag ||thingTheyClickedOn ===rightItemImageTag){
       //count vote & add to item
     updateStorage();
@@ -211,21 +222,27 @@ function handleClick(e){
     itemImageSectionTag.removeEventListener('click', handleClick);
     renderResults();
     makeItemChart();
+    totalPercent();
+    makePercentageChart();
   }
 }
+
 //Total Percentage
 function totalPercent(){
-  let storageArray=[];
-
+  
+  // storageArray.push(currentLeftItem.percent);
+  // storageArray.push(currentMiddleItem.percent);
+  // storageArray.push(currentRightItem.percent);
   for (let i=0; i<Item.allItems.length; i++) {
     if (parseInt(Item.allItems[i].votes)===0 || parseInt(Item.allItems[i].timesViewed)===0)
   {
     storageArray.push(0);
   }else {
     storageArray.push(parseInt(Item.allItems[i].votes) / parseInt(Item.allItems[i].timesViewed)*100);
+    
   }
 }
-return storageArray;
+console.log(storageArray);
 }
 //listner
 itemImageSectionTag.addEventListener('click', handleClick)
@@ -256,5 +273,3 @@ console.log(currentRightItem)
 console.log(currentMiddleItem)
 console.log(currentLeftItem)
 renderThreeItems(currentLeftItem, currentMiddleItem, currentRightItem);
-
-
